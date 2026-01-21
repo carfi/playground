@@ -12,8 +12,19 @@ public class SystemMetricsExample {
         System.out.println("OS Name: " + baseBean.getName());
         System.out.println("OS Version: " + baseBean.getVersion());
         System.out.println("Architecture: " + baseBean.getArch());
+        System.out.println("Java Vendor: " + System.getProperty("java.vendor"));
         System.out.println("Available processors: " + baseBean.getAvailableProcessors());
-        System.out.printf("System load average (1 min): %.2f%n", baseBean.getSystemLoadAverage());
+        double loadAvg = baseBean.getSystemLoadAverage();
+        if (loadAvg >= 0) {
+            System.out.printf("System load average (1 min): %.2f%n", loadAvg);
+        } else {
+            String osName = baseBean.getName().toLowerCase();
+            if (osName.contains("windows")) {
+                System.out.println("System load average is not available on Windows. Use the CPU load metrics below as an alternative.");
+            } else {
+                System.out.println("System load average is not available on this platform.");
+            }
+        }
 
         if (sunBean != null) {
             double processCpuLoad = sunBean.getProcessCpuLoad();
